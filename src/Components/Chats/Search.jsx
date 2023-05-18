@@ -92,7 +92,7 @@ const Search = () => {
         />
         <input
           onKeyDown={(e) => e.code === "Enter" && handleSearch()}
-          type="search"
+          type="text"
           placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
