@@ -10,11 +10,26 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import profile from "../../assets/images/user.png";
 
 const Signup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [img, setImg] = useState(null);
+
+  useEffect(() => {
+    fetch(profile)
+      .then((response) => response.blob())
+      .then((blob) => {
+        setImg(new File([blob], "image.png"), {
+          type: "image/png",
+        });
+      })
+      .catch((error) => {
+        console.log("Error fetching image:", error);
+      });
+  }, []);
 
   const onSignup = (e) => {
     e.preventDefault();
@@ -23,13 +38,12 @@ const Signup = () => {
     const userName = e.target[1].value;
     const email = e.target[2].value;
     const password = e.target[3].value;
-    const file = e.target[5].files[0];
-    
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         const storageRef = ref(storage, displayName);
-        const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, img);
 
         uploadTask.on(
           (error) => {
@@ -76,7 +90,12 @@ const Signup = () => {
         <input type="email" placeholder="Email" />
         <input type="password" placeholder="Password" />
         <input type="password" placeholder="Confirm Password" />
-        <input type="file" id="file" style={{ display: "none" }} />
+        <input
+          onChange={(e) => setImg(e.target.files[0])}
+          type="file"
+          id="file"
+          style={{ display: "none" }}
+        />
         <label htmlFor="file">
           <FontAwesomeIcon
             style={{ color: "#fff", cursor: "pointer" }}
