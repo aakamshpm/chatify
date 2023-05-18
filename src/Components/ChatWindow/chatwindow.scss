@@ -1,0 +1,39 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  background-color: #202329;
+  border-left: 2px solid #fff;
+  // overflow: hidden;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+
+    .header-options {
+        display: flex;
+        gap: 2em;
+        margin-right: 1em;
+    }
+
+  }
+
+  .initial-chatwindow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     
+    h1 {
+      font-size: 3em;
+      letter-spacing: 4px;
+      margin-top: 6em;
+
+      span {
+        padding: 8px;
+        border-radius: 15px;
+        background-color: #a1a1a1;
+        color: #000;
+      }
+    }
+  }
+}
