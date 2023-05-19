@@ -3,6 +3,8 @@ import "./signup.scss";
 import {
   faCircleNotch,
   faCloudArrowUp,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { auth, db, storage } from "../../utils/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -18,6 +20,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [img, setImg] = useState(null);
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     fetch(profile)
@@ -80,7 +83,7 @@ const Signup = () => {
     const userName = e.target[1].value.trim();
     const email = e.target[2].value.trim();
     const password = e.target[3].value.trim();
-    const confirmPassword = e.target[4].value.trim(); 
+    const confirmPassword = e.target[4].value.trim();
 
     const newErrors = {};
 
@@ -110,14 +113,15 @@ const Signup = () => {
       newErrors.password = "Entet a valid password!";
     }
 
-    if(password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords doesn't match!"
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords doesn't match!";
     }
 
     setErrors(newErrors);
 
-    Object.keys(newErrors).length === 0 && onSignup(displayName, userName, email, password);
-   };
+    Object.keys(newErrors).length === 0 &&
+      onSignup(displayName, userName, email, password);
+  };
 
   return (
     <div className="register">
@@ -136,10 +140,20 @@ const Signup = () => {
         <input type="email" placeholder="Email" />
         {errors.email && <span>{errors.email}</span>}
 
-        <input type="password" placeholder="Password" />
+        <div className="password-input">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+          />
+          <FontAwesomeIcon
+            icon={showPassword ? faEyeSlash : faEye}
+            style={{ color: "#fff", marginLeft: "1em", cursor: "pointer" }}
+            onClick={() => setShowPassword((prev) => !prev)}
+          />
+        </div>
         {errors.password && <span>{errors.password}</span>}
 
-        <input type="password" placeholder="Confirm Password" />
+        <input type={showPassword ? "text" : "password"} placeholder="Confirm Password" />
         {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
 
         <input
