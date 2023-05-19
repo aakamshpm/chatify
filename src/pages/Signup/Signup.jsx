@@ -17,6 +17,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [img, setImg] = useState(null);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetch(profile)
@@ -31,13 +32,9 @@ const Signup = () => {
       });
   }, []);
 
-  const onSignup = (e) => {
-    e.preventDefault();
+  const onSignup = (displayName, userName, email, password) => {
     setLoading(true);
-    const displayName = e.target[0].value;
-    const userName = e.target[1].value;
-    const email = e.target[2].value;
-    const password = e.target[3].value;
+    console.log(displayName);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -77,6 +74,51 @@ const Signup = () => {
       });
   };
 
+  const validateForm = (e) => {
+    e.preventDefault();
+    const displayName = e.target[0].value.trim();
+    const userName = e.target[1].value.trim();
+    const email = e.target[2].value.trim();
+    const password = e.target[3].value.trim();
+    const confirmPassword = e.target[4].value.trim(); 
+
+    const newErrors = {};
+
+    if (displayName === "") {
+      newErrors.displayName = "Enter your name";
+    } else if (!/^[A-Za-z]+$/.test(displayName)) {
+      newErrors.displayName = "Enter a valid name!";
+    }
+
+    if (userName === "") {
+      newErrors.userName = "Enter a username";
+    }
+
+    if (email === "") {
+      newErrors.email = "Enter email";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Enter a valid email!";
+    }
+
+    if (password === "") {
+      newErrors.password = "Enter a password";
+    } else if (
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}/.test(
+        password
+      )
+    ) {
+      newErrors.password = "Entet a valid password!";
+    }
+
+    if(password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords doesn't match!"
+    }
+
+    setErrors(newErrors);
+
+    Object.keys(newErrors).length === 0 && onSignup(displayName, userName, email, password);
+   };
+
   return (
     <div className="register">
       <div className="signup-header">
@@ -84,12 +126,22 @@ const Signup = () => {
         <h2>Register Now !</h2>
         <div />
       </div>
-      <form onSubmit={onSignup}>
+      <form onSubmit={validateForm}>
         <input type="text" placeholder="Name" />
+        {errors.displayName && <span>{errors.displayName}</span>}
+
         <input type="text" placeholder="Username" />
+        {errors.userName && <span>{errors.userName}</span>}
+
         <input type="email" placeholder="Email" />
+        {errors.email && <span>{errors.email}</span>}
+
         <input type="password" placeholder="Password" />
+        {errors.password && <span>{errors.password}</span>}
+
         <input type="password" placeholder="Confirm Password" />
+        {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+
         <input
           onChange={(e) => setImg(e.target.files[0])}
           type="file"

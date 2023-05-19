@@ -1,4 +1,4 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./chats.scss";
 import { useState } from "react";
@@ -13,10 +13,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { db } from "../../utils/firebase";
+import { auth, db } from "../../utils/firebase";
 import { useAuth } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
 import { useChatContext } from "../../Context/ChatContext";
+import { signOut } from "firebase/auth";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -25,10 +26,7 @@ const Search = () => {
   const { dispatch } = useChatContext();
 
   const handleSearch = async () => {
-    const q = query(
-      collection(db, "users"),
-      where("userName", "==", username)
-    );
+    const q = query(collection(db, "users"), where("userName", "==", username));
     try {
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
@@ -44,7 +42,7 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
-    dispatch({ type: "CHANGE_USER", payload: user})
+    dispatch({ type: "CHANGE_USER", payload: user });
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
@@ -81,22 +79,44 @@ const Search = () => {
     setUsername("");
   };
 
+  const onLogout = () => {
+    signOut(auth)
+      .then(() => {
+        toast.info("Logged Out !");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <div className="search-bar">
-        <FontAwesomeIcon
-          icon={faMagnifyingGlass}
-          size="2x"
-          style={{ color: "#ffffff5e" }}
-          className="search-icon"
+        <div className="search-input">
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            size="2x"
+            style={{ color: "#ffffff5e" }}
+            className="search-icon"
+          />
+          <input
+            onKeyDown={(e) => e.code === "Enter" && handleSearch()}
+            type="text"
+            placeholder="Enter Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+
+        <div className="chat-options">
+          <img src={currentUser.photoURL} alt="" />
+          <FontAwesomeIcon
+          icon={faRightFromBracket}
+          style={{ color: "#a1a1a1", cursor: "pointer" }}
+          size="lg"
+          onClick={onLogout}
         />
-        <input
-          onKeyDown={(e) => e.code === "Enter" && handleSearch()}
-          type="text"
-          placeholder="Enter Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        </div>
       </div>
       {user && (
         <div className="search-div" onClick={handleSelect}>
