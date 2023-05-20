@@ -5,24 +5,38 @@
   background-color: #202329;
   border-left: 2px solid #fff;
 
+  &.show-chatWindow {
+    display: flex;
+  }
+
   .header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 20px;
 
-    .header-options {
-        display: flex;
-        gap: 2em;
-        margin-right: 1em;
+    .header-name {
+      display: flex;
+      align-items: center;
+
+      h1 {
+        font-size: 30px;
+        margin-left: 1em;
+      }
     }
 
+    .header-options {
+      display: flex;
+      gap: 2em;
+      margin-right: 1em;
+    }
   }
 
   .initial-chatwindow {
     display: flex;
     justify-content: center;
     align-items: center;
-     
+
     h1 {
       font-size: 3em;
       letter-spacing: 4px;
@@ -33,6 +47,23 @@
         border-radius: 15px;
         background-color: #a1a1a1;
         color: #000;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .chat-window {
+    display: none;
+    width: 100vw;
+    border: none;
+
+    .header {
+      .header-options {
+        margin: 0;
+      }
+      h1 {
+        font-size: 27px;
       }
     }
   }

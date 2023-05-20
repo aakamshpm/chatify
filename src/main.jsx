@@ -5,6 +5,7 @@ import "./index.css";
 import { AuthProvider } from "./Context/AuthContext.jsx";
 import { ChatProvider } from "./Context/ChatContext.jsx";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>

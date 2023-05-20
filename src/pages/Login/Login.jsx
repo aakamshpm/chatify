@@ -2,13 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "./login.scss";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -18,18 +21,32 @@ const Login = () => {
         navigate("/", { replace: true });
       })
       .catch((error) => {
-        // console.log(error.code);
-        toast.error(error.code, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.error("Incorrect email or password!");
+        console.log(error.code);
       });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (email.trim() === "") {
+      newErrors.email = "Enter your email";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = "Enter a valid email;";
+    }
+    setErrors(newErrors);
+
+    if (password.trim() === "") {
+      newErrors.password = "Enter your password";
+    } else if (
+      !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}/.test(
+        password.trim()
+      )
+    ) {
+      newErrors.password = "Entet a valid password!";
+    }
+
+    Object.keys(newErrors).length === 0 && onLogin();
   };
 
   return (
@@ -46,18 +63,28 @@ const Login = () => {
           type="email"
           placeholder="Email"
         />
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-          placeholder="Password"
-        />
+        {errors.email && <span>{errors.email}</span>}
+        <div className="password-input">
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            onKeyDown={(e) => e.code === "Enter" && validateForm()}
+          />
+          <FontAwesomeIcon
+            icon={showPassword ? faEyeSlash : faEye}
+            style={{ color: "#fff", marginLeft: "1em", cursor: "pointer" }}
+            onClick={() => setShowPassword((prev) => !prev)}
+          />
+        </div>
+        {errors.password && <span>{errors.password}</span>}
       </div>
       <div className="login-controls">
         <button onClick={() => navigate("/signup")} type="button">
           Signup
         </button>
-        <p onClick={onLogin}>Login</p>
+        <p onClick={validateForm}>Login</p>
       </div>
     </div>
   );

@@ -140,7 +140,7 @@ const Signup = () => {
         <input type="email" placeholder="Email" />
         {errors.email && <span>{errors.email}</span>}
 
-        <div className="password-input">
+        <div className="password-input" style={{ display: "flex" }}>
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
@@ -153,7 +153,10 @@ const Signup = () => {
         </div>
         {errors.password && <span>{errors.password}</span>}
 
-        <input type={showPassword ? "text" : "password"} placeholder="Confirm Password" />
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+        />
         {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
 
         <input

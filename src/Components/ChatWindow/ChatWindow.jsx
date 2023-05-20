@@ -3,21 +3,19 @@ import {
   faPhone,
   faVideo,
   faEllipsisVertical,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import "./chatwindow.scss";
 import { InputField, Messages } from "../";
 import { useChatContext } from "../../Context/ChatContext";
 
-const ChatWindow = () => {
+const ChatWindow = ({ showChatWindow, setShowChatWindow }) => {
   const { data } = useChatContext();
 
-  console.log(data.chatId);
-
   return (
-    <div className="chat-window">
+    <div className={`chat-window ${showChatWindow && "show-chatWindow"}`}>
       {data.chatId === "null" ? (
-        
-        <div className="initial-chatwindow">  
+        <div className="initial-chatwindow">
           <h1>
             Welcome to <span>Chatify</span>
           </h1>
@@ -25,7 +23,16 @@ const ChatWindow = () => {
       ) : (
         <>
           <div className="header">
-            <h1>{data.user?.displayName}</h1>
+            <div className="header-name">
+              {showChatWindow && (
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowChatWindow(false)}
+                />
+              )}
+              <h1>{data.user?.displayName}</h1>
+            </div>
             <div className="header-options">
               <FontAwesomeIcon
                 icon={faPhone}
