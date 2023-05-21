@@ -98,6 +98,7 @@ const Search = () => {
             size="2x"
             style={{ color: "#ffffff5e" }}
             className="search-icon"
+            onClick={handleSearch}
           />
           <input
             onKeyDown={(e) => e.code === "Enter" && handleSearch()}
