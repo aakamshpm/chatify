@@ -33,6 +33,10 @@
     display: flex;
     flex-direction: column;
 
+    .password-input {
+      display: flex;
+    }
+
     input {
       padding: 1em;
       width: 17em;

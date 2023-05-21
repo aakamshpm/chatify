@@ -5,13 +5,18 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import "./login.scss";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleQuestion,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showToolTip, setShowToolTip] = useState(false);
 
   const navigate = useNavigate();
 
@@ -74,11 +79,32 @@ const Login = () => {
           />
           <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
-            style={{ color: "#fff", marginLeft: "1em", cursor: "pointer" }}
+            style={{ color: "#fff", margin: "3em 0 0 1em", cursor: "pointer" }}
             onClick={() => setShowPassword((prev) => !prev)}
           />
+          <div className="hover-box">
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className="question-button"
+              onClick={() => setShowToolTip((prev) => !prev)}
+            />
+            {showToolTip && (
+              <div className="tool-tip">
+                Password must be at least 8 characters long and contain at least
+                one uppercase letter, one lowercase letter, one number, and one
+                special character
+              </div>
+            )}
+          </div>
         </div>
         {errors.password && <span>{errors.password}</span>}
+        {showToolTip && (
+              <div className="tool-tip">
+                Password must be at least 8 characters long and contain at least
+                one uppercase letter, one lowercase letter, one number, and one
+                special character
+              </div>
+            )}
       </div>
       <div className="login-controls">
         <button onClick={() => navigate("/signup")} type="button">

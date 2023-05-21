@@ -140,14 +140,14 @@ const Signup = () => {
         <input type="email" placeholder="Email" />
         {errors.email && <span>{errors.email}</span>}
 
-        <div className="password-input" style={{ display: "flex" }}>
+        <div className="password-input">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
           />
           <FontAwesomeIcon
             icon={showPassword ? faEyeSlash : faEye}
-            style={{ color: "#fff", marginLeft: "1em", cursor: "pointer" }}
+            style={{ color: "#fff", margin: "3em 0 0 1em", cursor: "pointer" }}
             onClick={() => setShowPassword((prev) => !prev)}
           />
         </div>
