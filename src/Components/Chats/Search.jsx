@@ -1,4 +1,7 @@
-import { faMagnifyingGlass, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./chats.scss";
 import { useState } from "react";
@@ -19,7 +22,7 @@ import { toast } from "react-toastify";
 import { useChatContext } from "../../Context/ChatContext";
 import { signOut } from "firebase/auth";
 
-const Search = () => {
+const Search = ({ setShowChatWindow }) => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const { currentUser } = useAuth();
@@ -42,6 +45,7 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
+    setShowChatWindow(true);
     dispatch({ type: "CHANGE_USER", payload: user });
     const combinedId =
       currentUser.uid > user.uid
@@ -112,11 +116,11 @@ const Search = () => {
         <div className="chat-options">
           <img src={currentUser.photoURL} alt="" />
           <FontAwesomeIcon
-          icon={faRightFromBracket}
-          style={{ color: "#a1a1a1", cursor: "pointer" }}
-          size="lg"
-          onClick={onLogout}
-        />
+            icon={faRightFromBracket}
+            style={{ color: "#a1a1a1", cursor: "pointer" }}
+            size="lg"
+            onClick={onLogout}
+          />
         </div>
       </div>
       {user && (

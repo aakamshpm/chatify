@@ -28,14 +28,13 @@ const Chats = () => {
 
   const handleSelect = (userInfo) => {
     setShowChatWindow(true);
-    // setShowChats(false);
     dispatch({ type: "CHANGE_USER", payload: userInfo });
   };
 
   return (
     <div className="overall-window">
       <div className={`chats ${showChatWindow && "hide-chats"}`}>
-        <Search />
+        <Search setShowChatWindow={setShowChatWindow} />
         {Object.keys(chats).length > 0 ? (
           <div className="all-chats">
             {Object.entries(chats)
