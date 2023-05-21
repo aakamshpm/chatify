@@ -20,6 +20,10 @@
       display: flex;
       align-items: center;
 
+      #back-arrow {
+        display: none;
+      }
+
       h1 {
         font-size: 30px;
         margin-left: 1em;
@@ -60,11 +64,16 @@
     border: none;
 
     .header {
+      .header-name {
+        #back-arrow {
+          display: block;
+        }
+        h1 {
+          font-size: 27px;
+        }
+      }
       .header-options {
         margin: 0;
-      }
-      h1 {
-        font-size: 27px;
       }
     }
   }

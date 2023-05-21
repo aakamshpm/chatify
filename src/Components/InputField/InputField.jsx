@@ -30,25 +30,27 @@ const InputField = () => {
     const storageRef = ref(storage, uuid());
     const uploadTask = uploadBytesResumable(storageRef, img);
 
-    if (img & text!=="") {
-      uploadTask.on(() => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          await updateDoc(doc(db, "chats", data.chatId), {
-            messages: arrayUnion({
-              id: uuid(),
-              text,
-              senderId: currentUser.uid,
-              date: Timestamp.now(),
-              img: downloadURL,
-            }),
+    if (img) {
+      uploadTask.on(
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            console.log(downloadURL);
+            await updateDoc(doc(db, "chats", data.chatId), {
+              messages: arrayUnion({
+                id: uuid(),
+                senderId: currentUser.uid,
+                img: downloadURL,
+                date: Timestamp.now(),
+              }),
+            });
           });
-        }),
-          (error) => {
-            console.log(error);
-          };
-      });
-    setImg(null);
-    } else if(text !== "") {
+        }
+      );
+      setImg(null);
+    } else if (text !== "") {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),

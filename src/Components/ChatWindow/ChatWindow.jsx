@@ -26,6 +26,7 @@ const ChatWindow = ({ showChatWindow, setShowChatWindow }) => {
             <div className="header-name">
               {showChatWindow && (
                 <FontAwesomeIcon
+                  id="back-arrow"
                   icon={faArrowLeft}
                   style={{ cursor: "pointer" }}
                   onClick={() => setShowChatWindow(false)}

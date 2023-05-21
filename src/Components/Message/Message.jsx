@@ -13,14 +13,13 @@ const Message = ({ message }) => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
 
-  let messageTime = '';
+  let messageTime = "";
 
   moment()
     .startOf("day")
     .isSame(moment.unix(message.date.seconds).startOf("day"))
-    ? messageTime = moment.unix(message.date.seconds).format("HH:mm")
-    : messageTime = moment.unix(message.date.seconds).format("MM-DD");
-
+    ? (messageTime = moment.unix(message.date.seconds).format("HH:mm"))
+    : (messageTime = moment.unix(message.date.seconds).format("MM-DD"));
 
   return (
     <div
@@ -39,7 +38,7 @@ const Message = ({ message }) => {
         <p>{messageTime}</p>
       </div>
       <div className="message-content">
-        <p>{message.text}</p>
+        {!message.img && <p>{message.text}</p>}
         {message.img && <img src={message.img} alt="photo" />}
       </div>
     </div>

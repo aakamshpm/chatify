@@ -12,10 +12,6 @@
     width: 50%;
     overflow-y: scroll;
 
-    &.hide-chats {
-      display: none;
-    }
-
     .search-bar {
       display: flex;
       align-items: center;
@@ -152,6 +148,10 @@
     height: max-content;
     .chats {
       width: 100vw;
+
+    &.hide-chats {
+      display: none;
+    }
 
       .search-bar {
         display: flex;
