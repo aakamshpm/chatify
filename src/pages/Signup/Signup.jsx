@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./signup.scss";
 import {
   faCircleNotch,
+  faCircleQuestion,
   faCloudArrowUp,
   faEye,
   faEyeSlash,
@@ -21,6 +22,7 @@ const Signup = () => {
   const [img, setImg] = useState(null);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showToolTip, setShowToolTip] = useState(false);
 
   useEffect(() => {
     fetch(profile)
@@ -150,8 +152,29 @@ const Signup = () => {
             style={{ color: "#fff", margin: "3em 0 0 1em", cursor: "pointer" }}
             onClick={() => setShowPassword((prev) => !prev)}
           />
+          <div className="hover-box">
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className="question-button"
+              onClick={() => setShowToolTip((prev) => !prev)}
+            />
+            {showToolTip && (
+              <div className="tool-tip">
+                Password must be at least 8 characters & contain at least one
+                uppercase letter, one lowercase letter, one number, and one
+                special character
+              </div>
+            )}
+          </div>
         </div>
         {errors.password && <span>{errors.password}</span>}
+        {showToolTip && (
+          <div className="tool-tip">
+            Password must be at least 8 characters long and contain at least one
+            uppercase letter, one lowercase letter, one number, and one special
+            character
+          </div>
+        )}
 
         <input
           type={showPassword ? "text" : "password"}

@@ -30,7 +30,7 @@ const InputField = () => {
     const storageRef = ref(storage, uuid());
     const uploadTask = uploadBytesResumable(storageRef, img);
 
-    if (img) {
+    if (img & text!=="") {
       uploadTask.on(() => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           await updateDoc(doc(db, "chats", data.chatId), {
@@ -47,7 +47,8 @@ const InputField = () => {
             console.log(error);
           };
       });
-    } else {
+    setImg(null);
+    } else if(text !== "") {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
           id: uuid(),
@@ -58,7 +59,6 @@ const InputField = () => {
       });
       setText("");
     }
-    setImg(null);
 
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"]: { text },
